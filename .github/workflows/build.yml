@@ -9,13 +9,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Install Gradle and Build APK
+      - name: Build Signed APK
         run: |
-          wget -q https://gradle.org
-          unzip -q gradle-8.5-bin.zip -d /opt
-          export PATH="/opt/gradle-8.5/bin:$PATH"
+          GRADLE_BIN=$(find /usr -name "gradle" -type f -executable 2>/dev/null | head -n 1)
+          echo "Using: $GRADLE_BIN"
           keytool -genkey -v -keystore release.jks -alias mykey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=GarageDev,O=Dev,C=RU"
-          gradle assembleRelease
+          $GRADLE_BIN assembleRelease
           BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | tail -n 1)
           $BUILD_TOOLS/zipalign -v -p 4 app/build/outputs/apk/release/app-release-unsigned.apk app-aligned.apk
           $BUILD_TOOLS/apksigner sign --ks release.jks --ks-pass pass:123456 --out CarEvolution-release.apk app-aligned.apk
