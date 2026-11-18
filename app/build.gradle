@@ -1,0 +1,14 @@
+apply plugin: 'com.android.application'
+android {
+    namespace 'com.garage.carevo'
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.garage.carevo"
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes { release { minifyEnabled false } }
+}
+dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }
