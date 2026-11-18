@@ -9,7 +9,7 @@ jobs:
         with: { distribution: 'temurin', java-version: '17' }
       - uses: gradle/actions/setup-gradle@v3
         with: { gradle-version: '8.5' }
-      - name: Generate Keystore and Build Signed APK
+      - name: Build Signed APK
         run: |
           keytool -genkey -v -keystore release.jks -alias mykey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=GarageDev,O=Dev,C=RU"
           gradle assembleRelease
