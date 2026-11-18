@@ -13,7 +13,7 @@ jobs:
         run: |
           GRADLE_BIN=$(find /usr -name "gradle" -type f -executable 2>/dev/null | head -n 1)
           keytool -genkey -v -keystore release.jks -alias mykey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=GarageDev,O=Dev,C=RU"
-          $GRADLE_BIN assembleRelease
+          $GRADLE_BIN assembleRelease --stacktrace
           cp app/build/outputs/apk/release/*.apk CarEvolution-release.apk
       - uses: actions/upload-artifact@v4
         with:
