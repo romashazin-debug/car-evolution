@@ -11,13 +11,9 @@ jobs:
           java-version: '17'
       - name: Build Signed APK
         run: |
-          GRADLE_BIN=$(find /usr -name "gradle" -type f -executable 2>/dev/null | head -n 1)
-          echo "Using: $GRADLE_BIN"
           keytool -genkey -v -keystore release.jks -alias mykey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=GarageDev,O=Dev,C=RU"
-          $GRADLE_BIN assembleRelease
-          BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | tail -n 1)
-          $BUILD_TOOLS/zipalign -v -p 4 app/build/outputs/apk/release/app-release-unsigned.apk app-aligned.apk
-          $BUILD_TOOLS/apksigner sign --ks release.jks --ks-pass pass:123456 --out CarEvolution-release.apk app-aligned.apk
+          gradle assembleRelease
+          cp app/build/outputs/apk/release/*.apk CarEvolution-release.apk
       - uses: actions/upload-artifact@v4
         with:
           name: CarEvolution-APK
