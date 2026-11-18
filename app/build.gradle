@@ -11,10 +11,6 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    lint {
-        checkReleaseBuilds false
-        abortOnError false
-    }
     signingConfigs {
         release {
             storeFile file("../release.jks")
@@ -29,7 +25,4 @@ android {
             signingConfig signingConfigs.release
         }
     }
-}
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.7.0'
 }
