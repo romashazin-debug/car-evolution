@@ -7,7 +7,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.yandex.mobile.ads.common.AdError;
-import com.yandex.mobile.ads.common.AdRequest;
+import com.yandex.mobile.ads.common.AdRequestConfiguration;
 import com.yandex.mobile.ads.common.AdRequestError;
 import com.yandex.mobile.ads.common.ImpressionData;
 import com.yandex.mobile.ads.rewarded.Reward;
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
 
     private void loadAd() {
         if (loader != null) {
-            loader.loadAd(new AdRequest.Builder(AD_ID).build());
+            loader.loadAd(new AdRequestConfiguration.Builder(AD_ID).build());
         }
     }
 
