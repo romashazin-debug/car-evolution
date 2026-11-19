@@ -12,6 +12,6 @@ document.getElementById('eb').onclick=()=>{if(s.c>=cars[s.l].c&&s.l<29){beep(620
 document.getElementById('tb').onclick=()=>{if(s.c>=s.tc){beep(540,0.12);s.c-=s.tc;s.t++;s.tc=Math.floor(s.tc*1.65);sv();ui()}};
 document.getElementById('ab').onclick=()=>{if(s.c>=s.mc){beep(460,0.12);s.c-=s.mc;s.m++;s.mc=Math.floor(s.mc*1.55);sv();ui()}};
 function bst(){x=2;s.c+=Math.max(getClick()*35,getAuto()*25);const b=document.getElementById('adb');b.disabled=true;b.innerText="🔥 НИТРО x2 АКТИВНО!";ui();setTimeout(()=>{x=1;b.disabled=false;b.innerText="🎬 Нитро x2 + Бонус кэш (Реклама)";ui()},30000)}
-document.getElementById('adb').onclick=()=>{if(sdk)sdk.adv.showRewardedVideo({callbacks:{onRewarded:bst}});else bst()};
+document.getElementById('adb').onclick=()=>{if(window.AndroidAds)window.AndroidAds.showRewarded();else if(sdk)sdk.adv.showRewardedVideo({callbacks:{onRewarded:bst}});else bst()};
 setInterval(()=>{if(s.m>0){s.c+=getAuto();ui()}},1000);setInterval(sv,5000);if(typeof YaGames!=='undefined')YaGames.init().then(_s=>{sdk=_s;sdk.features?.LoadingAPI?.ready()}).catch(()=>{});ui();
 </script></body></html>
