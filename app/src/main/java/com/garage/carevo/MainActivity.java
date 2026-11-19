@@ -7,11 +7,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.yandex.mobile.ads.common.AdError;
-import com.yandex.mobile.ads.common.AdRequestConfiguration;
+import com.yandex.mobile.ads.common.AdRequest;
 import com.yandex.mobile.ads.common.AdRequestError;
 import com.yandex.mobile.ads.common.ImpressionData;
-import com.yandex.mobile.ads.common.InitializationListener;
-import com.yandex.mobile.ads.common.MobileAds;
 import com.yandex.mobile.ads.rewarded.Reward;
 import com.yandex.mobile.ads.rewarded.RewardedAd;
 import com.yandex.mobile.ads.rewarded.RewardedAdEventListener;
@@ -27,12 +25,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MobileAds.initialize(this, new InitializationListener() {
-            @Override
-            public void onInitializationCompleted() {
-                loadAd();
-            }
-        });
         loader = new RewardedAdLoader(this);
         loader.setAdLoadListener(new RewardedAdLoadListener() {
             @Override
@@ -44,6 +36,7 @@ public class MainActivity extends Activity {
                 rewardedAd = null;
             }
         });
+        loadAd();
 
         wv = new WebView(this);
         WebSettings s = wv.getSettings();
@@ -82,7 +75,7 @@ public class MainActivity extends Activity {
 
     private void loadAd() {
         if (loader != null) {
-            loader.loadAd(new AdRequestConfiguration.Builder(AD_ID).build());
+            loader.loadAd(new AdRequest.Builder().build(), AD_ID);
         }
     }
 
