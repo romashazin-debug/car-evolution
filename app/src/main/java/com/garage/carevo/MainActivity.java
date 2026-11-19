@@ -1,4 +1,5 @@
 package com.garage.carevo;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
@@ -9,6 +10,7 @@ import com.yandex.mobile.ads.common.AdError;
 import com.yandex.mobile.ads.common.AdRequestConfiguration;
 import com.yandex.mobile.ads.common.AdRequestError;
 import com.yandex.mobile.ads.common.ImpressionData;
+import com.yandex.mobile.ads.common.InitializationListener;
 import com.yandex.mobile.ads.common.MobileAds;
 import com.yandex.mobile.ads.rewarded.Reward;
 import com.yandex.mobile.ads.rewarded.RewardedAd;
@@ -25,11 +27,22 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MobileAds.initialize(this, () -> loadAd());
+        MobileAds.initialize(this, new InitializationListener() {
+            @Override
+            public void onInitializationCompleted() {
+                loadAd();
+            }
+        });
         loader = new RewardedAdLoader(this);
         loader.setAdLoadListener(new RewardedAdLoadListener() {
-            @Override public void onAdLoaded(RewardedAd ad) { rewardedAd = ad; }
-            @Override public void onAdFailedToLoad(AdRequestError err) { rewardedAd = null; }
+            @Override
+            public void onAdLoaded(RewardedAd ad) {
+                rewardedAd = ad;
+            }
+            @Override
+            public void onAdFailedToLoad(AdRequestError err) {
+                rewardedAd = null;
+            }
         });
 
         wv = new WebView(this);
@@ -41,20 +54,23 @@ public class MainActivity extends Activity {
         wv.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void showRewarded() {
-                runOnUiThread(() -> {
-                    if (rewardedAd != null) {
-                        rewardedAd.setAdEventListener(new RewardedAdEventListener() {
-                            @Override public void onAdShown() {}
-                            @Override public void onAdFailedToShow(AdError e) { grantReward(); loadAd(); }
-                            @Override public void onAdDismissed() { rewardedAd = null; loadAd(); }
-                            @Override public void onAdClicked() {}
-                            @Override public void onAdImpression(ImpressionData d) {}
-                            @Override public void onRewarded(Reward r) { grantReward(); }
-                        });
-                        rewardedAd.show(MainActivity.this);
-                    } else {
-                        grantReward();
-                        loadAd();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (rewardedAd != null) {
+                            rewardedAd.setAdEventListener(new RewardedAdEventListener() {
+                                @Override public void onAdShown() {}
+                                @Override public void onAdFailedToShow(AdError e) { grantReward(); loadAd(); }
+                                @Override public void onAdDismissed() { rewardedAd = null; loadAd(); }
+                                @Override public void onAdClicked() {}
+                                @Override public void onAdImpression(ImpressionData d) {}
+                                @Override public void onRewarded(Reward r) { grantReward(); }
+                            });
+                            rewardedAd.show(MainActivity.this);
+                        } else {
+                            grantReward();
+                            loadAd();
+                        }
                     }
                 });
             }
@@ -71,6 +87,8 @@ public class MainActivity extends Activity {
     }
 
     private void grantReward() {
-        if (wv != null) wv.evaluateJavascript("if(typeof bst==='function')bst();", null);
+        if (wv != null) {
+            wv.evaluateJavascript("if(typeof bst==='function')bst();", null);
+        }
     }
 }

@@ -15,7 +15,7 @@ jobs:
       - name: Build Signed APK
         run: |
           keytool -genkey -v -keystore release.jks -alias mykey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=GarageDev,O=Dev,C=RU"
-          gradle assembleRelease --stacktrace > build.log 2>&1 || (grep -E "FAILURE:|Execution failed|Caused by:|AndroidManifest" build.log | head -n 25; exit 1)
+          gradle assembleRelease --stacktrace > build.log 2>&1 || (grep -E "error:|FAILURE:|Caused by:" build.log | head -n 25; exit 1)
           cp app/build/outputs/apk/release/*.apk CarEvolution-release.apk
       - uses: actions/upload-artifact@v4
         with:
