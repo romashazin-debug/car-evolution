@@ -9,7 +9,7 @@ import com.yandex.mobile.ads.common.AdError;
 import com.yandex.mobile.ads.common.AdRequestConfiguration;
 import com.yandex.mobile.ads.common.AdRequestError;
 import com.yandex.mobile.ads.common.ImpressionData;
-import com.yandex.mobile.ads.common.YandexAds;
+import com.yandex.mobile.ads.common.MobileAds;
 import com.yandex.mobile.ads.rewarded.Reward;
 import com.yandex.mobile.ads.rewarded.RewardedAd;
 import com.yandex.mobile.ads.rewarded.RewardedAdEventListener;
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        YandexAds.initialize(this, () -> loadAd());
+        MobileAds.initialize(this, () -> loadAd());
         loader = new RewardedAdLoader(this);
         loader.setAdLoadListener(new RewardedAdLoadListener() {
             @Override public void onAdLoaded(RewardedAd ad) { rewardedAd = ad; }
