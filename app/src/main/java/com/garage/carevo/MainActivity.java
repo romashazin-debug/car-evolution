@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
 
     private void loadAd() {
         if (loader != null) {
-            loader.loadAd(new AdRequest.Builder().build(), AD_ID);
+            loader.loadAd(new AdRequest.Builder(AD_ID).build());
         }
     }
 
